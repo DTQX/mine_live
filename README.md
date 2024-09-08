@@ -1,4 +1,4 @@
-# 黄金矿工LiveServer版
+# 黄金矿工 LiveServer 版
 
 ## 开发日志
 
@@ -7,32 +7,32 @@
 - 添加游戏成功和失败的判定
 - 得分达标后为绿色
 - 实现游戏失败后重置数据重新开始
-- 修复settings界面一直会有menu界面的BUG
+- 修复 settings 界面一直会有 menu 界面的 BUG
 - 主界面右下角显示版本号
-- 发布版本v-1.5
+- 发布版本 v-1.5
 
 ### 2022-06-11
 
-- 修复游戏界面调整窗口大小后会出现弹窗数字的BUG
-- 修复弹窗界面调整窗口大小后游戏界面数字消失的BUG
-- 添加了回车开始游戏、1~5购买道具的功能，实现了全键盘游玩
+- 修复游戏界面调整窗口大小后会出现弹窗数字的 BUG
+- 修复弹窗界面调整窗口大小后游戏界面数字消失的 BUG
+- 添加了回车开始游戏、1~5 购买道具的功能，实现了全键盘游玩
 - 时间结束后抓到的物品不计入总金额
 - 实现每局自动更新分数
 - 实现结束当前关卡按钮，给分数增加量设置上限
-- 发布版本v-1.4
+- 发布版本 v-1.4
 
 ### 2022-06-05
 
-- 修复弹窗界面可以抓矿物的BUG
-- 修复卡商店界面无限时间BUG
+- 修复弹窗界面可以抓矿物的 BUG
+- 修复卡商店界面无限时间 BUG
 
 ### 2022-06-01
 
-- 修复窗口y轴偏移量的问题
-- 修复商店界面固定BUG
-- 修复关卡数每次会多加1的BUG
-- 修复弹窗界面调整窗口大小会导致数字消失的BUG
-![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/202206011053923.png)
+- 修复窗口 y 轴偏移量的问题
+- 修复商店界面固定 BUG
+- 修复关卡数每次会多加 1 的 BUG
+- 修复弹窗界面调整窗口大小会导致数字消失的 BUG
+  ![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/202206011053923.png)
 
 ### 2022-05-30
 
@@ -48,32 +48,32 @@
 ### 2022-05-29
 
 - 实现了游戏界面更改时间和页面切换功能
-- 优化界面切换逻辑，将score_number的resize整合到render里面
+- 优化界面切换逻辑，将 score_number 的 resize 整合到 render 里面
 - 绘制商店界面技能价格背景
 - 绘制商店技能的价格
-- 优化game_background的resize逻辑，并更改game_map里的resize
+- 优化 game_background 的 resize 逻辑，并更改 game_map 里的 resize
 - 实现了购买商品扣钱的逻辑，并退出商店界面的测试
 - 实现了关卡数的递增
 - 实现了应用到全局的金钱和关卡变量
 - 开始绘制弹窗
-- 更改canvas显示顺序：弹窗在最上层，明天在弹窗类里面new一个数字显示类，传入弹窗的canvas即可
-![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/202205292327751.png)
-![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/202205292328038.png)
+- 更改 canvas 显示顺序：弹窗在最上层，明天在弹窗类里面 new 一个数字显示类，传入弹窗的 canvas 即可
+  ![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/202205292327751.png)
+  ![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/202205292328038.png)
 
 ### 2022-05-28
 
-- 加入tnt炸毁矿物的动画
-- 编写tnt爆炸逻辑，实现了连爆
-- 解决了tnt无法炸掉所有矿物的bug
+- 加入 tnt 炸毁矿物的动画
+- 编写 tnt 爆炸逻辑，实现了连爆
+- 解决了 tnt 无法炸掉所有矿物的 bug
 - 调整了矿物的质量参数
 - 完成了商店顶端的数字栏
 - 完成了商店的下一关按钮
 - 成功绘制了技能图标的在售和售出样式！
 - 实现了点击购买技能的逻辑和页面展示
-- 解决了canvas聚焦和键盘监听事件绑定失败的bug
-![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/20220528215608.png)
-![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/20220528215443.png)
-![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/202205282157627.jpg)
+- 解决了 canvas 聚焦和键盘监听事件绑定失败的 bug
+  ![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/20220528215608.png)
+  ![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/20220528215443.png)
+  ![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/202205282157627.jpg)
 
 ### 2022-05-27
 
@@ -81,7 +81,7 @@
 - 删除了一些不必要的代码
 - 绘制炸弹图标和旁边的炸弹数量
 - 实现炸弹炸毁钩子上矿物功能
-![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/20220528102132.png)
+  ![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/20220528102132.png)
 
 ### 2022-05-26
 
@@ -91,8 +91,8 @@
 - 绘制卷线器
 - 绘制矿物图标、位置、碰撞体积
 - 编写随机生成矿物位置的函数
-![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/20220526224449.png)
-![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/202206022019131.jpg)
+  ![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/20220526224449.png)
+  ![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/202206022019131.jpg)
 
 ### 2022-05-25
 
@@ -102,15 +102,15 @@
 - 绘制游戏背景图片
 - 绘制图标和数字槽
 - 绘制数字
-![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/20220526101304.png)
+  ![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/20220526101304.png)
 
 ### 2022-05-24
 
-- 删除多余的静态文件，修改appid
+- 删除多余的静态文件，修改 appid
 - 实现玩家类
 - 实现钩子类
 - 实现金矿基类
-![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/20220524203558.png)
+  ![](https://picgo-yangqing.oss-cn-hangzhou.aliyuncs.com/img/20220524203558.png)
 
 ### 2022-05-23
 
