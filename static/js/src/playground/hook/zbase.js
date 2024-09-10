@@ -1,9 +1,10 @@
 import { AcGameObject } from "/static/js/src/playground/ac_game_objects/zbase.js";
 
 export class Hook extends AcGameObject {
-  constructor(playground, player, score_number) {
+  constructor(playground, player, score_number, game_background) {
     super();
     this.playground = playground;
+    this.game_background = game_background;
     this.ctx = this.playground.game_map.ctx;
     this.player = player;
     this.score_number = score_number;
@@ -16,8 +17,6 @@ export class Hook extends AcGameObject {
 
     // 1：向左摆动，2：向右摆动，3：发射钩子，4：收回钩子
     this.direction_flag = 1;
-    // 抓到的物品
-    this.caught_item = "hook";
 
     this.direction_tmp = 0; // 记录发射钩子前的摆动方向
     this.direction = (Math.PI / 2) * (this.timedelta / 1000);
@@ -26,8 +25,10 @@ export class Hook extends AcGameObject {
     this.tile_length = this.min_tile_length;
     this.base_moved = 0.005;
     this.moved = 0;
+    // 抓到的物品
+    this.caught_item = "";
     this.catched = false; // 是否抓到东西
-    this.willcatched = 0; //随机数判断是否成功抓取         111
+    this.canCatch = true;
     this.catched_money = 0;
     this.money = 0;
     this.is_start = false;
@@ -72,10 +73,10 @@ export class Hook extends AcGameObject {
     console.log("fresh hook!");
     // 1：向左摆动，2：向右摆动，3：发射钩子，4：收回钩子
     this.direction_flag = 1;
-    // 抓到的物品
-    this.caught_item = "hook";
     this.tile_length = this.min_tile_length;
     this.catched = false; // 是否抓到东西
+    this.canCatch = true;
+    this.caught_item = "";
     this.catched_money = 0;
   }
 
@@ -113,11 +114,16 @@ export class Hook extends AcGameObject {
   // 检测是否抓到金矿，并返回抓到了那个金矿
 
   update_catch() {
+    if (!this.canCatch) {
+      return;
+    }
     for (let i = 0; i < this.playground.miners.length; i++) {
       let miner = this.playground.miners[i];
       if (this.is_collision(miner)) {
         this.catched = true;
-        return miner;
+        this.canCatch = false;
+        this.caught_item = miner.name;
+        this.catchedMiner = miner;
       }
     }
   }
@@ -143,14 +149,22 @@ export class Hook extends AcGameObject {
   is_collision(miner) {
     //判断物品是否在钩子发射的直线上
     let distance = this.get_dist(this.x, this.y, miner.x, miner.y);
-    function getRandomInt(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-    this.willcatched = getRandomInt(1, 10);
-    if (distance < this.radius + miner.radius && this.willcatched >= 5) {
+    if (distance < this.radius + miner.radius) {
       return true;
     }
     return false;
+  }
+
+  randomDropCatchedItem(mineral_name) {
+    this.dropTimer = setTimeout(() => {
+      this.catched = false;
+      this.caught_item = "";
+      this.game_background.addMineral(
+        mineral_name,
+        this.x + 0.02,
+        this.y + 0.02
+      );
+    }, 500);
   }
 
   update_tile_length() {
@@ -187,20 +201,18 @@ export class Hook extends AcGameObject {
     ) {
       this.direction_flag = 4;
       if (this.catched) {
-        let miner = this.update_catch();
+        let miner = this.catchedMiner;
         if (miner) {
           this.catched_money = miner.money;
           // this.caught_item = "hook_" + miner.name;
           this.caught_item = miner.name;
           miner.is_catched = true;
           if (miner.name === "tnt") {
-            // 如果抓到了tnt要进行一个特判
-            this.caught_item = "hook_tnt_fragment";
             miner.explode_tnt();
           } else {
-            // miner.destroy();
-            this.playground.removeMineral(miner);
+            this.game_background.removeMineral(miner);
             this.play_mineral_caught_audio(miner.name);
+            this.randomDropCatchedItem(miner.name);
           }
           // 根据矿物的质量调整收钩速度
           this.moved = this.base_moved * (Math.abs(1000 - miner.weight) / 1000);
@@ -208,6 +220,8 @@ export class Hook extends AcGameObject {
           this.playground.game_map.game_background.render();
         }
       } else {
+        this.catched = false;
+        this.caught_item = "";
         this.moved = this.base_moved * 0.8; // 钩子收回时速度更快
       }
     }
@@ -220,11 +234,13 @@ export class Hook extends AcGameObject {
       this.direction_flag = this.direction_tmp;
       // 如果抓回了东西就计算价值
       if (this.catched) {
+        this.dropTimer && clearTimeout(this.dropTimer);
         this.add_money();
         this.playground.audio_point.play(); // 播放收钱声音
-        this.caught_item = "hook";
         this.catched = false;
+        this.caught_item = "";
       }
+      this.canCatch = true;
     }
   }
 
@@ -337,8 +353,6 @@ export class Hook extends AcGameObject {
       this.hook_sheet0,
       1,
     ];
-
-    this.caught_item = "hook";
   }
 
   render() {
@@ -367,7 +381,11 @@ export class Hook extends AcGameObject {
     // 绘制钩子（抓到东西也用这个函数）
     this.draw_hook_image(canvas, scale, icon_pos);
     // 绘制抓住的物品
-    this.draw_catched_item(canvas, scale, icon_pos);
+    this.draw_catched_item(
+      canvas,
+      scale,
+      this.game_background.MINERS[this.caught_item]
+    );
   }
 
   // 绘制钩子的碰撞体积
@@ -434,19 +452,24 @@ export class Hook extends AcGameObject {
   }
 
   draw_catched_item(canvas, scale, icon_pos) {
+    if (!this.caught_item) {
+      return;
+    }
+    let img = icon_pos[0];
     this.ctx.save();
-    this.ctx.translate(this.x * scale, this.y * scale);
-    this.ctx.rotate(-this.angle - icon_pos[4]);
+    // 这里的位置是以canvas高度为单位1的，所以不用像绘制碰撞体积那样 * scale
+    this.ctx.translate(this.x * scale + 2, this.y * scale + 2);
+    this.ctx.rotate(-this.angle - icon_pos[2]);
     this.ctx.drawImage(
-      icon_pos[5],
-      icon_pos[0],
-      icon_pos[1],
-      icon_pos[2],
-      icon_pos[3],
-      (-icon_pos[2] / 2) * canvas.scale,
+      img,
+      0,
+      0,
+      img.width,
+      img.height,
+      (-img.width / 2) * canvas.scale,
       -this.radius * scale,
-      icon_pos[2] * canvas.scale,
-      icon_pos[3] * canvas.scale
+      img.width * canvas.scale,
+      img.height * canvas.scale
     );
     this.ctx.restore();
   }

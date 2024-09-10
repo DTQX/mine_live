@@ -29,8 +29,8 @@ export class Mineral extends AcGameObject {
   start() {}
 
   update() {
-    if (this.is_catched) {
-    }
+    // if (this.is_catched) {
+    // }
   }
 
   updatePositon(x, y) {

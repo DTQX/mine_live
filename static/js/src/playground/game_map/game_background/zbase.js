@@ -107,8 +107,9 @@ export class GameBackground extends AcGameObject {
         )
       ) {
         // 随机选择一个矿物
-        mineral_name =
-          this.MINERS_NAME[Math.floor(Math.random() * this.MINERS_NAME.length)];
+        mineral_name = this.MINERS_NAME[3];
+        // mineral_name =
+        // this.MINERS_NAME[Math.floor(Math.random() * this.MINERS_NAME.length)];
         random_length = Math.random() * max_length;
         // 用长度和角度计算随机的位置，方便判断是否和已经生成的矿物位置重合
         random_angle = Math.random() * max_angle * 2 - max_angle;
@@ -147,13 +148,13 @@ export class GameBackground extends AcGameObject {
         this.MINERS[mineral_name]
       )
     );
+    this.render();
   }
 
   removeMineral(mineral) {
     const index = this.playground.miners.findIndex((item) => item === mineral);
     if (index > -1) {
       this.playground.miners[index].destroy();
-      this.playground.miners.splice(index, 1);
     }
   }
 

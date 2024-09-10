@@ -28,7 +28,8 @@ export class Player extends AcGameObject {
     this.hook = new Hook(
       this.playground,
       this,
-      this.playground.game_map.score_number
+      this.playground.game_map.score_number,
+      this.game_background
     );
   }
 
